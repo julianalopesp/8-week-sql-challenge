@@ -8,7 +8,7 @@ Foi uma ótima forma de colocar em prática conceitos como `JOINs`, `CTEs`, `win
 
 ## 📁 Estudos de Caso
 
-[1. Danny’s Diner](https://github.com/julianalopesp/8-week-sql-challenge/tree/main/case-study-1-dannys-diner) | Análise de clientes e comportamento de consumo
+[1. Danny’s Diner](https://github.com/julianalopesp/8-week-sql-challenge/tree/main/case%20study%20%231%20-%20danny's%20diner) | Análise de clientes e comportamento de consumo
 
 ---
 
