@@ -1,6 +1,6 @@
 # 🍜 SQL Challenge: Danny's Diner
 
-This project is part of the [8 Week SQL Challenge](https://8weeksqlchallenge.com/), created by Danny Ma.
+Este projeto faz parte do [8 Week SQL Challenge](https://8weeksqlchallenge.com/), criado por Danny Ma.
 
 Entity Relationship Diagram
 
@@ -8,8 +8,9 @@ Entity Relationship Diagram
 
 ***
 
-Questions
-1. What is the total amount each customer spent at the restaurant?
+### Questões
+
+1. **Qual foi o valor total que cada cliente gastou no restaurante?**
 ```
 SELECT
     s.customer_id,
@@ -27,7 +28,7 @@ GROUP BY s.customer_id
 | A           | 76  |
 
 ---
-2. How many days has each customer visited the restaurant?
+2. **Quantos dias cada cliente visitou o restaurante?**
 ```
 SELECT
 	s.customer_id,
@@ -43,7 +44,7 @@ GROUP BY s.customer_id
 
 ---
 
-3. What was the first item from the menu purchased by each customer?
+3. **Qual foi o primeiro item do cardápio comprado por cada cliente?**
 ```
 WITH ranked_sales AS (
 	SELECT
@@ -70,7 +71,7 @@ WHERE rs.rn = 1
 
 ---
 
-4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+4. **Qual é o item mais comprado do cardápio e quantas vezes ele foi comprado por todos os clientes?**
 ```
 SELECT
     me.product_name,
@@ -88,7 +89,7 @@ LIMIT 1
 
 ---
 
-5. Which item was the most popular for each customer?
+5. **Qual item foi o mais popular para cada cliente?**
 ```
 WITH total_purchases AS (
   SELECT
@@ -117,7 +118,7 @@ ORDER BY customer_id
 | C           | ramen        |
 
 ---
-6. Which item was purchased first by the customer after they became a member?
+6. **Qual item foi o primeiro comprado pelo cliente após se tornar um membro?**
 ```
 WITH first_member_item AS (
   SELECT
@@ -147,7 +148,7 @@ WITH first_member_item AS (
 
 ---
 
-7. Which item was purchased just before the customer became a member?
+7. **Qual item foi comprado logo antes de o cliente se tornar um membro?**
 ```
 WITH last_non_member_item AS (
    SELECT
@@ -177,7 +178,7 @@ SELECT
 
 ---
 
-8. What is the total items and amount spent for each member before they became a member?
+8. **Qual é o total de itens e o valor gasto por cada membro antes de se tornarem membros?**
 ```
 SELECT
  	s.customer_id,
@@ -197,7 +198,7 @@ SELECT
 
 ---
 
-9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
+9.  **Se cada $1 gasto equivale a 10 pontos e sushi tem um multiplicador de pontos de 2x – quantos pontos cada cliente teria?**
 ```
 SELECT
  	s.customer_id,
@@ -219,7 +220,7 @@ SELECT
 
 ---
 
-10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
+10. **Na primeira semana após o cliente entrar no programa (incluindo a data de adesão), ele ganha 2x pontos em todos os itens, não apenas sushi – quantos pontos os clientes A e B teriam no final de janeiro?**
 ```
 SELECT
 	s.customer_id,
