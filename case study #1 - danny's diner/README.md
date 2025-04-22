@@ -87,3 +87,158 @@ LIMIT 1
 | ramen        | 8               |
 
 ---
+
+5. Which item was the most popular for each customer?
+```
+WITH total_purchases AS (
+  SELECT
+	s.customer_id,
+    	s.product_id,
+    RANK() OVER (PARTITION BY customer_id ORDER BY COUNT(product_id) DESC) AS rnk
+    FROM sales s
+  	GROUP BY s.customer_id, s.product_id
+ )
+    
+SELECT
+	tp.customer_id,
+    	me.product_name
+FROM total_purchases tp
+JOIN menu me ON me.product_id = tp.product_id
+WHERE rnk = 1
+ORDER BY customer_id
+```
+
+| customer_id | product_name |
+| ----------- | ------------ |
+| A           | ramen        |
+| B           | sushi        |
+| B           | curry        |
+| B           | ramen        |
+| C           | ramen        |
+
+---
+6. Which item was purchased first by the customer after they became a member?
+```
+WITH first_member_item AS (
+  SELECT
+  	s.customer_id,
+  	s.order_date,
+  	s.product_id,
+  	mb.join_date,
+  	ROW_NUMBER() OVER (PARTITION BY s.customer_id ORDER BY s.order_date asc) AS rn
+  	FROM sales s
+  	JOIN members mb ON mb.customer_id = s.customer_id
+  	WHERE s.order_date >= mb.join_date
+  )
+  
+ SELECT
+ 	fm.customer_id,
+    	me.product_name,
+    	fm.order_date,
+    	fm.join_date
+ FROM first_member_item fm
+ JOIN menu me ON me.product_id = fm.product_id
+ WHERE rn = 1
+```
+| customer_id | product_name | order_date | join_date  |
+| ----------- | ------------ | ---------- | ---------- |
+| B           | sushi        | 2021-01-11 | 2021-01-09 |
+| A           | curry        | 2021-01-07 | 2021-01-07 |
+
+---
+
+7. Which item was purchased just before the customer became a member?
+```
+WITH last_non_member_item AS (
+   SELECT
+   s.customer_id,
+   s.product_id,
+   s.order_date,
+   RANK() OVER (PARTITION BY s.customer_id ORDER BY s.order_date desc) AS rnk
+   FROM sales s
+   JOIN members mb ON mb.customer_id = s.customer_id
+   WHERE s.order_date < mb.join_date
+  )
+
+SELECT 
+	lnm.customer_id,
+  	mn.product_name,
+  	lnm.order_date
+ FROM last_non_member_item lnm
+ JOIN menu mn ON mn.product_id = lnm.product_id
+ WHERE rnk = 1
+```
+
+| customer_id | product_name | order_date |
+| ----------- | ------------ | ---------- |
+| B           | sushi        | 2021-01-04 |
+| A           | sushi        | 2021-01-01 |
+| A           | curry        | 2021-01-01 |
+
+---
+
+8. What is the total items and amount spent for each member before they became a member?
+```
+SELECT
+ 	s.customer_id,
+ 	COUNT(s.product_id) AS total_items,
+ 	SUM(mnu.price) AS total_spent
+ FROM sales s
+ JOIN members mb ON mb.customer_id = s.customer_id
+ JOIN menu mnu ON mnu.product_id = s.product_id
+ WHERE s.order_date < mb.join_date
+ GROUP BY s.customer_id
+ ```
+
+| customer_id | total_items | total_spent |
+| ----------- | ----------- | ----------- |
+| B           | 3           | 40          |
+| A           | 2           | 25          |
+
+---
+
+9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
+```
+SELECT
+ 	s.customer_id,
+    	SUM(
+	      CASE
+	      	WHEN mnu.product_name = 'sushi' THEN mnu.price * 10 * 2
+	      ELSE mnu.price * 10
+	      END
+	      ) AS total_points
+	      FROM sales s
+	      JOIN menu mnu ON mnu.product_id = s.product_id
+	      GROUP BY customer_id
+```
+| customer_id | total_points |
+| ----------- | ------------ |
+| B           | 940          |
+| C           | 360          |
+| A           | 860          |
+
+---
+
+10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
+```
+SELECT
+	s.customer_id,
+    	SUM(
+	      mnu.price * 10 *
+	      CASE
+	      	WHEN s.order_date between mb.join_date AND mb.join_date + interval '6 days' THEN 2
+	      	WHEN mnu.product_name = 'sushi' THEN 2
+	      ELSE 1
+	      END
+	      ) AS total_points_january
+	      FROM sales s
+	      JOIN members mb ON mb.customer_id = s.customer_id
+	      JOIN menu mnu ON mnu.product_id = s.product_id
+	      WHERE DATE_TRUNC('month', s.order_date) = DATE '2021-01-01'
+	      GROUP BY s.customer_id
+```
+
+| customer_id | total_points_january |
+| ----------- | -------------------- |
+| B           | 820                  |
+| A           | 1370                 |
