@@ -8,7 +8,7 @@ Foi uma ótima forma de colocar em prática conceitos como `JOINs`, `CTEs`, `win
 
 ## 📁 Estudos de Caso
 
-| 1. Danny’s Diner | Análise de clientes e comportamento de consumo | [🔗 Ver solução](github.com/julianalopesp/8-week-sql-challenge/case study #1 - danny's diner) |
+[1. Danny’s Diner](https://github.com/julianalopesp/8-week-sql-challenge/tree/main/case-study-1-dannys-diner) | Análise de clientes e comportamento de consumo
 
 ---
 
@@ -36,5 +36,5 @@ Este projeto é baseado no desafio original de 8 semanas disponível em [8weeksq
 ## 🤝 Conecte-se
 
 Caso tenha sugestões, queira trocar experiências ou esteja participando do desafio também, me chama!  
-💼 LinkedIn: [Seu LinkedIn]([https://www.linkedin.com](https://www.linkedin.com/in/julianalopesp)
+💼 [Linkedin](https://www.linkedin.com/in/julianalopesp)
 
